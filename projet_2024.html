@@ -1,0 +1,976 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+   <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <link rel="stylesheet" type="text/css"
+   href="../../stylesheets/empty.css">
+   <TITLE>Projet PRIM11</TITLE>
+</HEAD>
+<body>
+<h1 id="programmation-impérative-projet-2024">Programmation impérative,
+projet 2024</h1>
+<h2 id="date-et-principe">Date et principe</h2>
+<p>Cette page peut être mise à jour, avec informations complémentaires,
+précisions, questions bonus, etc. Pensez à y revenir souvent.</p>
+<p>Projet à rendre pour le <strong>06/01/2025</strong> à
+<strong>23h59</strong>, aucun retard ne sera toléré.</p>
+<p>Mise-à-jour 15/12/2024: suppression du paramètre <tt>max</tt> de la fonction
+  <tt>create_picture</tt>. (Inutile puisque les valeurs doivent être
+  ramenées entre 0 et 255.) </p>
+<p>Mise-à-jour 20/12/2024: Ajout de fichiers pour tester la fonction
+  d'ouverture, corrections mineures.</p>
+<h3 id="lire-tout-le-sujet.">Lire tout le sujet.</h3>
+<p>Un rendu de projet comprend :</p>
+<ul>
+<li><p>Un rapport typographié précisant vos choix, les problèmes
+techniques qui se posent et les solutions trouvées ; il présente en
+introduction le contexte et le sujet du projet, et il précise en
+conclusion les limites de votre programme. Le rapport sera de préférence
+composé avec
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mtext mathvariant="normal">L</mtext><mtext mathvariant="normal">A</mtext></msup><msub><mtext mathvariant="normal">T</mtext><mtext mathvariant="normal">E</mtext></msub><mtext mathvariant="normal">X</mtext></mrow><annotation encoding="application/x-tex">\text{L}^{\text{A}}\text{T}_{\text{E}}\text{X}</annotation></semantics></math>.
+Le soin apporté à la grammaire et à l’orthographe est largement pris en
+compte.</p></li>
+<li><p>Un code abondamment commenté ; la première partie des
+commentaires comportera systématiquement les lignes :</p>
+<ol type="1">
+<li><code>@requires</code> décrivant les préconditions : c’est-à-dire
+conditions sur les paramètres pour une bonne utilisation (pas de typage
+ici),</li>
+<li><code>@assigns</code> listant les zones de mémoire modifiées,</li>
+<li><code>@ensures</code> décrivant la propriété vraie à la sortie de la
+fonction lorsque les préconditions sont respectées, le cas échéant avec
+mention des comportements en cas de succès et en cas d’échec, En outre
+chaque boucle while doit contenir un commentaire précisant la raison de
+sa terminaison (le cas échéant). De même en cas d’appels récursifs. On
+pourra préciser des informations additionnelles si des techniques
+particulières méritent d’être mentionnées.</li>
+</ol>
+<p>Le code doit enfin compiler sans erreur (évidemment) et sans warning
+lorsque l’option -Wall est utilisée. <strong>Un code qui ne compile pas
+se verra attribuer la note de 0</strong>.</p></li>
+<li><p>Un manuel d’utilisation de votre exécutable, même minimal, est
+toujours bienvenu.</p></li>
+</ul>
+<p>Avez-vous lu tout le sujet ?</p>
+<h3 id="protocole-de-dépôt">Protocole de dépôt</h3>
+<p>Vous devez rendre</p>
+<ul>
+<li>votre rapport (en pdf) et</li>
+<li>vos fichiers de code</li>
+</ul>
+<p>rassemblés dans une archive tar gzippée identifiée comme
+votre_prénom_votre_nom.tgz. La commande devrait ressembler à :
+<code>tar zcvf randolph_carter.tgz rapport.pdf fichiers.c autres_trucs_éventuels.c…</code></p>
+<p><strong>N’OUBLIEZ surtout PAS de mettre le nom identifiant l’archive
+(donc nouveau) en PREMIER.</strong></p>
+<p><strong>Lisez le man !</strong> et testez le contenu de votre archive
+(une commande comme par exemple :
+<code>tar tvf randolph_carter.tgz</code> doit lister les fichiers et
+donner leur taille).</p>
+<ul>
+<li>Une archive qui ne contient pas les fichiers demandés ne sera pas
+excusable.</li>
+<li><strong>Une archive qui n’est pas au format demandé (archive tar
+gzippée avec suffixe .tgz) ne sera pas corrigée</strong> donc c’est
+0/20.</li>
+</ul>
+<p>Toute tentative de fraude (plagiat, etc.) sera sanctionnée. Si
+plusieurs projets ont des sources trop similaires (y compris sur une
+partie du code uniquement), tous leurs auteurs se verront attribuer la
+note 0/20. En particulier, il faudra prendre soin de ne pas publier son
+travail sur un dépôt public (en tout cas pas avant la date de fin de
+rendu). On évitera également de demander (ou de donner) des conseils
+trop précis à ses camarades (y compris des promotions précédentes), ces
+conseils ayant pu être donnés à plusieurs personnes. Les rendus seront
+comparés deux à deux.</p>
+<p>De même, l’usage d’intelligence artificielle générative pour produire
+le code et/ou le rapport est strictement interdite.</p>
+<h4 id="procédure-de-dépôt">Procédure de dépôt</h4>
+<p>Vous devez enregistrer votre archive tgz dans le dépôt dédié au cours
+PRIM11 (prim11-projet-2024) en vous connectant à <a
+href="http://exam.ensiie.fr">exam.ensiie.fr</a>. Ce dépôt sera ouvert
+jusqu’au 6 janvier 2025 inclus.</p>
+<h2 id="contexte">Contexte</h2>
+<p>Le but de ce projet est d’implémenter différents traitements sur des
+images en niveau de gris ou des images en couleur comme lors du TP
+6.</p>
+<p>Pour réaliser ces traitement vous allez écrire un programme
+permettant de :</p>
+<ul>
+<li>Lire un ou plusieurs fichiers images (au format <a
+href="https://fr.wikipedia.org/wiki/Portable_pixmap">Portable Pixmap</a>
+et plus particulièrement le format PPM binaire pour les images couleurs
+(vu en cours) et PGM binaire pour les images en niveau de gris (du
+TP6)).</li>
+<li>Puis de réaliser différents traitements sur les images lues.</li>
+<li>Et enfin écrire les images résultantes dans de nouveaux fichiers.
+<ul>
+<li>Par exemple si vous lisez l’image
+<code>images/Lenna_color.ppm</code> pour lui appliquer un traitement qui
+consistera à inverser les niveaux des pixels de l’image vous pourrez
+sauvegarder le résultat dans un fichier
+<code>images/Lenna_color_inv.ppm</code>.</li>
+</ul></li>
+</ul>
+<h3 id="structures-de-données-et-modules">Structures de données et
+modules</h3>
+<ul>
+<li>Une image est constituée d’une matrice de pixels (Picture Elements).
+<ul>
+<li>Pour une image en niveaux de gris chaque pixel est représenté par
+une valeur (généralement codée sur 1 octet, donc à valeurs dans
+l’intervalle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0 \cdots 255]</annotation></semantics></math>)</li>
+<li>Pour une image en couleur chaque pixel est représenté par un triplet
+d’octets (un pour chaque composante : <em>rouge</em>, <em>vert</em> et
+<em>bleu</em>).</li>
+<li>Même si une image est censée être une “matrice” de pixels, on
+utilise la plupart du temps un tableau monodimensionnel pour stocker en
+mémoire les valeurs de ces pixels. On ne réalisera ainsi qu’une seule
+allocation / dés-allocation pour créer / détruire les pixels en
+mémoire.</li>
+</ul></li>
+</ul>
+<p>Il serait utile de créer un module <code>pictures.[h|c]</code>
+contenant les structures de données dont vous aurez besoin ainsi que le
+fonctions travaillant directement sur des images:</p>
+<p>Vous pourrez donc dans ce module déclarer :</p>
+<ul>
+<li>Un type <code>byte</code> par exemple pour contenir les valeurs
+codées par un octet. On pourra aussi définir une constante
+<code>MAX_BYTE 255</code> pour contenir la valeur max des octets.</li>
+<li>Une structure <code>picture</code> similaire à celle utilisée dans
+le TP 6 qui contiendra
+<ul>
+<li>Une hauteur, une largeur</li>
+<li>Le nombre de canaux de l’image
+<ul>
+<li>1 canal pour les images en niveau de gris.</li>
+<li>3 canaux pour les images en couleur correspondant aux valeurs pour
+le rouge, le vert et le bleu.</li>
+</ul></li>
+<li>Un pointeur vers les données pixels de l’image utilisant un tableau
+unidimensionnel d’octets.
+<ul>
+<li>Pour accéder à la composante
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mi>c</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">k \in [0 \cdots c - 1]</annotation></semantics></math>
+d’un pixel situé à la ligne
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mi>h</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">i \in [0 \cdots h - 1]</annotation></semantics></math>
+et à la colonne
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mi>w</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">j \in [0 \cdots w - 1]</annotation></semantics></math>
+d’une image couleur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+on pourra donc utiliser
+<code>...data[((i * w + j) * c) + k]</code>.</li>
+</ul></li>
+</ul></li>
+<li>Vous pourrez isoler les opérations liées à la
+<strong>lecture</strong> ou à l’<strong>écriture</strong> d’une
+composante de pixel
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(i, j, c)</annotation></semantics></math>
+dans une image dans un sous module <code>pixels.[h/c]</code> dans lequel
+pour pourrez aussi avantageusement définir des constantes symboliques
+(en utilisant un <code>enum</code> par exemple) <code>RED</code>,
+<code>GREEN</code> et <code>BLUE</code> pour accéder directement à ces
+composantes dans les pixels.</li>
+<li>On vous fournit un module <a
+href="ressources/filename.zip"><code>filename.[h/c]</code></a> qui vous
+permettra de
+<ul>
+<li>Séparer un chemin vers un fichier image
+<code>&lt;dirname&gt;/&lt;name&gt;.&lt;ext&gt;</code> en ses composantes
+<code>&lt;dirname&gt;</code>, <code>&lt;name&gt;</code> et
+<code>&lt;ext&gt;</code></li>
+<li>Composer un chemin vers un fichier image à partir de ces
+composantes.</li>
+<li>Vous pourrez ainsi extraire le nom du fichier image traité par votre
+programme et le customiser avec les noms des opérations que vous
+appliquerez dessus avant</li>
+</ul></li>
+</ul>
+<h3 id="lecture-et-écriture-de-fichiers-images">Lecture et écriture de
+fichiers images</h3>
+<p>La structure des fichiers binaires PGM et/ou PPM est toujours la
+même</p>
+<pre><code>    P6
+    512 512
+    255
+    ...</code></pre>
+<ul>
+<li>La première ligne contient un “magic number” correspondant au type
+de fichier (Ici <code>P6</code> identifie un fichier PPM binaire
+contenant une image couleur (ce serait <code>P5</code> pour les fichiers
+PGM binaires contenant des images en niveaux de gris)).</li>
+<li>La seconde ligne contient les dimensions de l’image :
+<code>512 512</code> correspondent ici à la largeur et la hauteur de
+l’image respectivement.</li>
+<li>La troisième ligne contient la valeur maximale des pixels à lire
+dans ce qui suit <code>...</code>: Ici <code>255</code>.
+<ul>
+<li>Cette valeur maximale peut varier entre <code>1</code> et
+<code>255</code>.</li>
+<li>Si cette valeur était <code>64</code> cela voudrait dire qu’un pixel
+composé des valeurs
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>r</mi><mo>=</mo><mn>64</mn><mo>,</mo><mi>v</mi><mo>=</mo><mn>64</mn><mo>,</mo><mi>b</mi><mo>=</mo><mn>64</mn><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(r=64, v=64, b=64)</annotation></semantics></math>
+correspondrait à la couleur blanche, alors que si le maximum est de
+<code>255</code> un pixel
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>r</mi><mo>=</mo><mn>64</mn><mo>,</mo><mi>v</mi><mo>=</mo><mn>64</mn><mo>,</mo><mi>b</mi><mo>=</mo><mn>64</mn><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(r=64, v=64, b=64)</annotation></semantics></math>
+correspond à du gris foncé.</li>
+<li>Pour simplifier les choses nous ne prendrons pas en compte cette
+valeur maximale dans nos structures de données (ce qui revient
+implicitement à considérer une valeur maximale de <code>255</code> dans
+nos images). Néanmoins, dans ce cas il faudra la prendre en compte lors
+de la lecture des fichiers et corriger les valeurs des composantes des
+pixels (par
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mn>255</mn><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></mfrac><annotation encoding="application/x-tex">\frac{255}{max}</annotation></semantics></math>)
+pour qu’elles soient comprises dans l’intervalle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0 \cdots 255]</annotation></semantics></math>
+au lieu de la valeur maximale indiquée dans la 3ème ligne du
+fichier.</li>
+</ul></li>
+<li><strong>Après</strong> la première ligne et <strong>avant</strong>
+la quatrième ligne il peut y avoir un nombre indéterminé de lignes
+commençant par le caractère <code>#</code> que l’on doit considérer
+comme des lignes de commentaires et donc ignorer.</li>
+<li>La quatrième ligne <code>...</code> ou tout ce qui suit correspond
+aux données binaires des pixels. Dans le cas présenté ci-dessus il y a
+donc
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>512</mn><mo>×</mo><mn>512</mn><mo>×</mo><mn>3</mn><mo>=</mo><mn>786432</mn></mrow><annotation encoding="application/x-tex">512 \times 512 \times 3 = 786432</annotation></semantics></math>
+octets à lire avant la fin du fichier.</li>
+</ul>
+<p>Implémentez les fonctions pour :</p>
+<ul>
+<li>Lire des fichiers pour créer des images :
+<code>picture read_picture(char * filename);</code>
+<ul>
+<li><em>[in] filename</em> le nom du fichier à lire</li>
+<li><em>[out]</em> l’image lue</li>
+<li>Où <code>filename</code> pourra être :
+<ul>
+<li><code>*.pgm</code> pour lire des images en niveau de gris.</li>
+<li><code>*.ppm</code> pour lire des images en couleur (vu en
+cours).</li>
+</ul></li>
+<li>Voici quelques fichiers image volontairement erronés qui vous
+permettront de tester la robustesse de votre fonction de lecture : dans
+chaque cas d’erreur vous pourrez retourner une image vide.
+<ul>
+<li><a href="ressources/commented.ppm">commented.ppm</a> contient une
+image valide mais contenant plusieurs lignes de commentaires.</li>
+<li><a
+href="ressources/invalid_magic_number.pgm">invalid_magic_number.pgm</a>
+contient une image PGM ascii (et non pas binaire) avec un magic number
+différent de <code>P5</code> : <code>P2</code>. On considérera que l’on
+ne peut pas lire ce type de fichier.</li>
+<li><a href="ressources/invalid_height.pgm">invalid_height.pgm</a>
+contient une hauteur à <code>0</code> ce qui est impossible.</li>
+<li><a href="ressources/invalid_height.pgm">invalid_max.pgm</a> contient
+une valeur max des pixels à <code>0</code> ce qui est impossible.</li>
+<li><a
+href="ressources/invalid_read_count.pgm">invalid_read_count.pgm</a>
+contient un nombre incorrect de données pour les pixels (partie
+<code>...</code>) ne correspondant pas à
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mi>i</mi><mi>d</mi><mi>t</mi><mi>h</mi><mo>×</mo><mi>h</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>×</mo><mi>c</mi><mi>h</mi><mi>a</mi><mi>n</mi><mi>n</mi><mi>e</mi><mi>l</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">width \times height \times channels</annotation></semantics></math>.</li>
+</ul></li>
+</ul></li>
+<li>Écrire des images dans des fichiers :
+<code>int write_picture(picture p, char * filename);</code>
+<ul>
+<li><em>[in] p</em> l’image à écrire.</li>
+<li><em>[in] filename</em> le nom du fichier à écrire.</li>
+<li><em>[out]</em> valeur de retour nulle si l’écriture s’est bien
+passée et non nulle si un problème est survenu.
+<ul>
+<li>Par exemple : Si le type de l’image ne correspond pas au type de
+fichier demandé (d’après l’extension du fichier contenue dans
+<code>filename</code>) on renverra un code d’erreur non nul.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Dans les deux cas, on fera attention à bien traiter les différents
+cas d’erreur (ouverture du fichier, lecture des données de l’entête,
+allocation mémoire, etc.).</p>
+<p>Quelques images de test vous sont fournies :</p>
+<ul>
+<li><img src="ressources/Lenna_gray.png" alt="Lenna Gray" /> <a
+href="ressources/Lenna_gray.pgm"><code>Lenna_gray.pgm</code></a> : une
+version en niveaux de gris de la célèbre image “Lenna”.</li>
+<li><img src="ressources/Lenna_color.png" alt="Lenna Color" /> <a
+href="ressources/Lenna_color.ppm"><code>Lenna_color.ppm</code></a> : Une
+version en couleurs</li>
+<li><img src="ressources/Lenna_BW.png" alt="Lenna Black &amp; White" />
+<a href="ressources/Lenna_BW.pgm"><code>Lenna_BW.pgm</code></a> : Une
+version de noir et blanc</li>
+</ul>
+<h3 id="gestion-des-images">Gestion des images</h3>
+<p>Implémentez des fonctions pour créer, détruire, copier, interroger et
+convertir des images :</p>
+<ul>
+<li><strong>Créer une image</strong> :
+<code>picture create_picture(unsigned int width, unsigned int height, unsigned int channels);</code>
+où
+<ul>
+<li><em>[in] width</em> représente la largeur de l’image,</li>
+<li><em>[in] height</em> représente sa hauteur,</li>
+<li><em>[in] channels</em> le nombre de canaux et</li>
+<li><em>[out]</em> l’image initialisée</li>
+</ul></li>
+<li><strong>Nettoyer les données d’une image</strong> :
+<code>void clean_picture(picture * p);</code>
+<ul>
+<li><em>[in, out] picture</em> l’image à nettoyer</li>
+<li>Les données de l’image ont été libérées et ses champs remis à
+<code>0</code> ou <code>NULL</code>.</li>
+</ul></li>
+<li><strong>Copie d’une image</strong> :
+<code>picture copy_picture(picture p)</code>
+<ul>
+<li><em>[in] p</em> l’image à copier</li>
+<li><em>[out]</em> une copie de l’image</li>
+</ul></li>
+<li>Obtention d’informations sur une image
+<ul>
+<li>Indication d’<strong>image vide</strong> (si un de ses champs est
+nul) : <code>int is_empty_picture(picture p);</code>
+<ul>
+<li><em>[in] p</em> l’image à inspecter</li>
+<li><em>[out]</em> une valeur non nulle si p est vide, 0 sinon.</li>
+</ul></li>
+<li>Indication d’<strong>image en niveaux de gris</strong> :
+<code>int is_gray_picture(picture p);</code>
+<ul>
+<li><em>[in] p</em> l’image à inspecter</li>
+<li><em>[out]</em> une valeur non nulle si p est une image en niveaux de
+gris (ne possédant qu’un seul canal), 0 sinon.</li>
+</ul></li>
+<li>Indication d’<strong>image en couleurs</strong> :
+<code>int is_color_picture(picture p);</code>
+<ul>
+<li><em>[in] p</em> l’image à inspecter</li>
+<li><em>[out]</em> une valeur non nulle si p est une image en couleurs
+(possédant 3 canaux), 0 sinon.</li>
+</ul></li>
+<li><strong>Affichage des infos</strong> d’une image sur la console :
+<code>void info_picture(picture p);</code>
+<ul>
+<li><em>[in] p</em> l’image dont on veut afficher les infos.</li>
+<li>Affiche la chaîne : “(<code>&lt;width&gt;</code> x
+<code>&lt;height&gt;</code> x <code>&lt;channels&gt;</code>)” où
+<code>&lt;width&gt;</code>, <code>&lt;height&gt;</code> et
+<code>&lt;channels&gt;</code> sont à remplacer par leur valeurs
+respectives.</li>
+</ul></li>
+</ul></li>
+<li><strong>Conversion</strong> d’un format à un autre :
+<ul>
+<li>Convertir une image en niveau de gris vers une image en couleur :
+<code>picture convert_to_color_picture(picture p);</code>
+<ul>
+<li>en répétant les valeurs de niveau de gris dans chaque canal R, V,
+B.</li>
+<li><em>[in] p</em> l’image à convertir en couleurs</li>
+<li><em>[out]</em> l’image couleur convertie en couleurs.
+<ul>
+<li>Si <code>p</code> était déjà en couleur on se contentera de faire
+une copie</li>
+<li>Si <code>p</code>était une image en niveaux de gris on répétera la
+composante de niveau de gris dans chacune des composantes (rouge, vert,
+bleu) de l’image résultat.</li>
+</ul></li>
+</ul></li>
+<li>Convertir une image en couleur vers une image en niveaux de gris :
+<code>picture convert_to_gray_picture(picture p);</code>
+<ul>
+<li><em>[in] p</em> l’image à convertir en niveaux de gris</li>
+<li><em>[out]</em> l’image convertie en niveaux de gris
+<ul>
+<li>Si <code>p</code> était une image en couleur on la convertit en
+niveaux de gris en utilisant la règle suivante :
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.299</mn><mo>×</mo><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.587</mn><mo>×</mo><mi>V</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.114</mn><mo>×</mo><mi>B</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">G = (0.299\times R) + (0.587 \times V) + (0.114 \times B)</annotation></semantics></math>.</li>
+<li>Si <code>p</code> était déjà une image en niveau de gris on se
+contentera d’en faire une copie.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><strong>Séparation ou mélange</strong> des composantes d’une image
+<ul>
+<li><strong>Séparer les composantes</strong> d’une image couleur en 3
+images en niveau de gris contenant les valeurs pour le rouge, le vert et
+le bleu respectivement :
+<code>picture * split_picture(picture p);</code>
+<ul>
+<li><em>[in] p</em> l’image couleur dont on veut séparer les
+composantes</li>
+<li><em>[out]</em> un tableau de 3 images en niveau de gris contenant
+les valeurs des canaux R, V et B.
+<ul>
+<li>Si <code>p</code> ne peut pas être décomposée on se contentera de
+renvoyer NULL.</li>
+<li>Si <code>p</code> est une image en niveaux de gris on renverra un
+tableau ne contenant qu’un seul élément.</li>
+</ul></li>
+</ul></li>
+<li><strong>Mélanger les composantes</strong> à partir de 3 images en
+niveau de gris pour composer une image couleurs :
+<code>picture merge_picture(picture red, picture green, picture blue);</code>
+<ul>
+<li><em>[in] red</em> l’image en niveau de gris à utiliser pour
+fabriquer la composante rouge de l’image résultat.</li>
+<li><em>[in] green</em> l’image en niveau de gris à utiliser pour
+fabriquer la composante verte de l’image résultat.</li>
+<li><em>[in] blue</em> l’image en niveau de gris à utiliser pour
+fabriquer la composante bleue de l’image résultat.</li>
+<li><em>[out]</em> l’image composée
+<ul>
+<li>Si l’image résultat ne peut pas être créée (si par exemple les trois
+images <code>red</code>, <code>green</code> et <code>blue</code> ne sont
+pas de même taille ou type) on se contentera de renvoyer une image
+vide.</li>
+</ul></li>
+</ul></li>
+<li><img src="ressources/Lenna_color.png" alt="Lenna Color" />RVB
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_color_red.png" alt="Lenna red" />Red, <img
+src="ressources/Lenna_color_green.png" alt="Lenna green" /> Green, <img
+src="ressources/Lenna_color_blue.png" alt="Lenna blue" />Blue,</li>
+</ul></li>
+</ul>
+<h3 id="manipulation-directe-des-valeurs-des-pixels">Manipulation
+directe des valeurs des pixels</h3>
+<p>Ecrivez les fonctions pour :</p>
+<!--* __Modifier le max d'une image__ : `void set_max_picture(picture * p, byte max);`
+    * Modifier le champ `max` d'une image en recalculant les valeurs des pixels. Par exemple si l'ancienne valeur de `max` était $255$ et que la nouvelle valeur est $64$ il faut donc appliquer un facteur $\frac{64}{255}$ sur les valeurs des pixels.
+    * _[in,out] p_ l'image à normaliser
+    * _[int] max_ la nouvelle valeur du max-->
+<!--* __Normalisation du max d'une image__ : `void normalize_max_picture(picture * p);`
+    * Si la valeur du champ `max` d'une image n'est pas déjà égal à 255.
+    * _[in, out] p_ l'image dont on veut normaliser le max-->
+<ul>
+<li><strong>Eclaircissement d’une image</strong> :
+<code>picture brighten_picture(picture p, double factor);</code>
+<ul>
+<li><em>[in] p</em> l’image à éclaircir</li>
+<li><em>[in] factor</em> le facteur à appliquer aux valeurs des pixels
+de l’image</li>
+<li><em>[out]</em> l’image éclaircie</li>
+<li><img src="ressources/Lenna_gray.png" alt="Lenna Gray" />,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mo>=</mo><mn>1.5</mn><mo>→</mo></mrow><annotation encoding="application/x-tex">factor = 1.5 \rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_gray_brighten.png"
+alt="Lenna Brighten" /></li>
+</ul></li>
+<li><strong>Fonte (vers le bas) des valeurs des pixels d’une
+image</strong> :
+<code>picture melt_picture(picture p, int number);</code>
+<ul>
+<li>On choisit N pixels au hasard dans l’image. Pour chacun de ces
+pixels, si le pixel situé juste au dessus est plus sombre que le pixel
+choisi alors le pixel courant prends la valeur du pixel du dessus.</li>
+<li><em>[in] p</em> l’image à faire fondre</li>
+<li><em>[in] number</em> le nombre de pixels à choisir
+aléatoirement</li>
+<li><em>[out]</em> l’image contenant les pixels qui ont fondu vers le
+bas</li>
+<li><img src="ressources/Lenna_color.png" alt="Lenna Color" />,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>u</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>r</mi><mo>=</mo><mi>w</mi><mi>i</mi><mi>d</mi><mi>t</mi><mi>h</mi><mo>×</mo><mi>h</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>×</mo><mi>c</mi><mi>h</mi><mi>a</mi><mi>n</mi><mi>n</mi><mi>e</mi><mi>l</mi><mi>s</mi><mo>×</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">number = width \times height \times channels \times 5</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_color_melt.png" alt="Lenna Melted" /></li>
+</ul></li>
+</ul>
+<h3
+id="manipulation-des-valeurs-des-pixels-en-utilisant-une-lut-look-up-table">Manipulation
+des valeurs des pixels en utilisant une LUT (Look Up Table)</h3>
+<p>Une LUT (pour <em>L</em>ook <em>U</em>p <em>T</em>able, aussi appelée
+“fonction de transfert”) est une fonction qui à chaque niveau
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+d’une composante d’un pixel dans
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0 \cdots 255]</annotation></semantics></math>
+fait correspondre un autre niveau:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mi>l</mi><mi>u</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">j = lut(i)</annotation></semantics></math>,
+avec la plupart du temps
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mi>j</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">i \in [0 \cdots 255], j \in [0 \cdots 255]</annotation></semantics></math>
+mais pas obligatoirement.</p>
+<figure>
+<img src="ressources/lut.svg" alt="Exemple de LUT" />
+<figcaption aria-hidden="true">Exemple de LUT</figcaption>
+</figure>
+<p>Vous pourrez avantageusement créer un sous-module
+<code>lut.[h|c]</code> qui contiendra :</p>
+<ul>
+<li>La définition d’un type abstrait <code>lut</code> constitué :
+<ul>
+<li>d’une taille
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+indiquant le nombre de valeurs de la LUT.
+<ul>
+<li>La plupart du temps cette taille sera 256 pour avoir un index
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">i \in [0 \cdots 255]</annotation></semantics></math>.
+Mais si l’on choisit une LUT avec une taille bien plus petite on pourra
+créer des fonctions de transfert possédant des marches d’escalier qui
+permettront de grouper plusieurs indices
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+pour une même valeur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>u</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">lut(i)</annotation></semantics></math>
+: Voir le troisième exemple avec la fonction
+<code>set_levels_picture</code> ci-dessous.</li>
+</ul></li>
+<li>d’un tableau de
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+valeurs.</li>
+</ul></li>
+<li>De quoi gérer les LUTs :
+<ul>
+<li>Création</li>
+<li>Nettoyage</li>
+<li>Application d’une LUT à une image pour créer l’image modifiée.</li>
+</ul></li>
+</ul>
+<p>Ce module pourra alors être utilisé dans votre module principal
+<code>pictures.c</code>, mais ne devra pas être visible de votre
+programme principal <code>main.c</code>.</p>
+<p>Les opérations à réaliser avec des LUTs sont les suivantes :</p>
+<ul>
+<li><strong>Inverser les valeurs</strong> d’une image
+<code>picture inverse_picture(picture p);</code> de
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><mo>→</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>255</mn><mi>⋯</mi><mn>0</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">[0 \cdots 255] \rightarrow [255 \cdots 0]</annotation></semantics></math>
+<ul>
+<li><em>[in] l’image à inverser</em></li>
+<li><em>[out] l’image inversée</em></li>
+<li><img src="ressources/Lenna_color.png" alt="Lenna Color" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⊙</mo><annotation encoding="application/x-tex">\odot</annotation></semantics></math>
+<img src="ressources/lut_inverse.svg" alt="Inverse LUT" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_color_inverse.png"
+alt="Inverse image" /></li>
+</ul></li>
+<li><strong>Normaliser les valeurs d’une image</strong> :
+<code>picture normalize_dynamic_picture(picture p);</code>
+<ul>
+<li>Si les valeurs d’une image sont comprises entre <code>min</code> et
+<code>max</code> (à rechercher dans les valeurs des composantes des
+pixels), la normalisation des valeurs d’une image répartit celles-ci
+entre 0 et 255.</li>
+<li><em>[in, out] p</em> l’image à normaliser</li>
+<li><img src="ressources/Lenna_gray.png" alt="Lenna Gray" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⊙</mo><annotation encoding="application/x-tex">\odot</annotation></semantics></math>
+<img src="ressources/lut_ramp.svg" alt="Ramp LUT" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_gray_dynamic.png" alt="Lenna dynamic" /></li>
+</ul></li>
+<li><strong>Réduction du nombre de niveaux pour les pixels d’une
+image</strong> :
+<code>picture set_levels_picture(picture p, byte nb_levels);</code>
+<ul>
+<li><em>[in, out] p</em> l’image dont on veut changer le nombre de
+niveaux</li>
+<li><img src="ressources/Lenna_color.png" alt="Lenna Color" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⊙</mo><annotation encoding="application/x-tex">\odot</annotation></semantics></math>
+<img src="ressources/id8_lut.svg" alt="Ramp LUT" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_color_levels.png"
+alt="Lenna 8 levels" /></li>
+<li>La LUT utilisée ici est une une LUT identité
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>u</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">lut(i) = i</annotation></semantics></math>
+de taille 8 à laquelle on a ajouté
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>.
+Le fait d’utiliser une LUT de taille 8 (avec des valeurs
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>7</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\in [0 \cdots 7]</annotation></semantics></math>)
+permet de discrétiser les valeurs dans 8 groupes lorsque l’intervalle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>7</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0 \cdots 7]</annotation></semantics></math>
+est étalé sur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0 \cdots 255]</annotation></semantics></math>.
+Il faudra pour ce faire que l’on puisse appliquer des LUTs de tailles
+inférieures à 256.</li>
+</ul></li>
+</ul>
+<h3 id="opérations-arithmétiques-sur-les-images">Opérations
+arithmétiques sur les images</h3>
+<ul>
+<li><strong>Différence entre deux images</strong>
+<ul>
+<li><em>[in] la première image</em></li>
+<li><em>[in] la seconde image</em></li>
+<li><em>[out] une image contenant la différence (en valeur absolue) des
+deux images en entrée.</em></li>
+</ul></li>
+<li><strong>Multiplication de deux images</strong> :
+<code>picture mult_picture(picture p1, picture p2)</code>
+<ul>
+<li><em>[in] p1</em> la première image</li>
+<li><em>[in] p2</em> la seconde image</li>
+<li><em>[out] une image contenant le produit des deux images en
+entrée.</em></li>
+<li>Exemple : <img src="ressources/Lenna_gray.png" alt="Lenna" />p1 <img
+src="ressources/Lenna_BW.png" alt="Lenna Mask" />p2
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/multiplied.png" alt="Lenna Masked" />.</li>
+</ul></li>
+<li><strong>Mélange de deux images suivant une 3ème image</strong> :
+<code>picture mix_picture(picture p1, picture p2, picture p3)</code>
+<ul>
+<li><img src="ressources/Lenna_color_inverse.png"
+alt="Inverse image" />p1 <img src="ressources/Lenna_color.png"
+alt="Lenna Color" />p2 <img src="ressources/Lenna_BW.png"
+alt="Lenna Mask" />p3
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_color_mixture.png" alt="Lenna Mixed" />
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>u</mi><mi>l</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mi>p</mi><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>α</mi><mo>⋅</mo><mi>p</mi><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">result(i, j, c) = (1 - \alpha) \cdot p1(i, j, c) + \alpha \cdot p2(i, j, c)</annotation></semantics></math>
+avec
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mfrac><mrow><mi>p</mi><mn>3</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mn>255</mn></mfrac></mrow><annotation encoding="application/x-tex">\alpha = \frac{p3(i, j, c)}{255}</annotation></semantics></math></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="re-échantillonnage-dimages">Re-échantillonnage d’images</h3>
+<p>Le re-échantillonnage d’image consiste à changer la taille d’une
+image (largeur et/ou hauteur). L’idée principale consiste à calculer la
+position des pixels de l’image résultat sur la grille des pixels de
+l’image source. La figure suivante présente une grille
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>×</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">7 \times 6</annotation></semantics></math>
+que l’on cherche à re-échantillonner par une grille
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>×</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">6 \times 5</annotation></semantics></math>.</p>
+<figure>
+<img src="ressources/Resample.svg" alt="Grid Resample" />
+<figcaption aria-hidden="true">Grid Resample</figcaption>
+</figure>
+<p>Ainsi, un pixel de l’image résultat se situera toujours entre 4
+pixels de l’image source. On peut ainsi définir deux politiques pour
+calculer les valeurs des pixels de l’image résultat :</p>
+<ul>
+<li><strong>La politique de plus proche voisin</strong> (nearest
+neighbor) : la valeur d’un pixel résultat sera celle du pixel de l’image
+source le plus proche.
+<ul>
+<li>Dans le cas de la figure ci-dessus la valeur d’un pixel de l’image
+résultat
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>=</mo><msub><mi>P</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">P_{new} = P_4</annotation></semantics></math></li>
+<li><code>picture resample_picture_nearest(picture image, unsigned int width, unsigned int height);</code></li>
+<li>Exemple <img src="ressources/Lenna_color.png" alt="Lenna Color" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>256</mn><mo>×</mo><mn>256</mn></mrow><annotation encoding="application/x-tex">256 \times 256</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_color_larger_nearest.png"
+alt="resampled nearest neighbor" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>348</mn><mo>×</mo><mn>348</mn></mrow><annotation encoding="application/x-tex">348 \times 348</annotation></semantics></math></li>
+</ul></li>
+<li><strong>Une politique d’interpolation bi-linéaire</strong> : La
+valeur d’un pixel résultat est le résultat de l’interpolation
+bi-linéaire des valeurs des 4 pixels de l’image source entourant le
+pixel de l’image résultat.
+<ul>
+<li>Dans le cas de la figure ci-dessus
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha \in [0 \cdots 1]</annotation></semantics></math>
+correspond au coefficient d’interpolation horizontal et
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\beta \in [0 \cdots 1]</annotation></semantics></math>
+au coefficient d’interpolation vertical, on a alors la valeur d’un pixel
+de l’image résultat
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>P</mi><mn>1</mn></msub><mo>+</mo><mi>α</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>P</mi><mn>2</mn></msub><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>β</mi><msub><mi>P</mi><mn>3</mn></msub><mo>+</mo><mi>α</mi><mi>β</mi><msub><mi>P</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">P_{new} = (1 - \alpha)(1-\beta)P_1 + \alpha(1-\beta)P_2 + (1 - \alpha)\beta P_3 + \alpha \beta P_4</annotation></semantics></math>.</li>
+<li><code>picture resample_picture_bilinear(picture image, unsigned int width, unsigned int height);</code></li>
+<li>Exemple <img src="ressources/Lenna_color.png" alt="Lenna Color" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>256</mn><mo>×</mo><mn>256</mn></mrow><annotation encoding="application/x-tex">256 \times 256</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_color_larger_bilinear.png"
+alt="resampled nearest neighbor" />
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>348</mn><mo>×</mo><mn>348</mn></mrow><annotation encoding="application/x-tex">348 \times 348</annotation></semantics></math></li>
+</ul></li>
+</ul>
+<p>Vous pouvez consulter les pages suivantes pour de plus amples
+explications sur le re-échantillonnage :</p>
+<ul>
+<li><a
+href="https://medium.com/@chathuragunasekera/image-resampling-algorithms-for-pixel-manipulation-bee65dda1488">Image
+Resampling Algorithms</a> qui présente les deux techniques mentionnées
+ci-dessus.</li>
+<li><a
+href="https://en.wikipedia.org/wiki/Image_scaling#Nearest-neighbor_interpolation">Image
+scaling</a> qui présente de nombreuses autres techniques de
+re-échantillonnage.</li>
+</ul>
+<h3 id="programme-principal">Programme Principal</h3>
+<p>Votre programme principal devra consister en la lecture d’une ou
+plusieurs images source depuis des fichiers (PGM ou PPM) fournis en
+arguments du programme. Exemple :</p>
+<pre><code>./projet Lenna_gray.pgm Lenna_color.ppm</code></pre>
+<p>Votre programme devra alors écrire les fichiers suivants :</p>
+<ul>
+<li><code>Lenna_gray_convert_color.ppm</code> qui contiendra la
+conversion de <code>Lenna_gray.pgm</code> en une image couleur</li>
+<li><code>Lenna_color_convert_gray.pgm</code> qui contiendra la
+conversion de <code>Lenna_color.ppm</code> en une image en niveaux de
+gris.</li>
+<li><code>Lenna_color_red.pgm</code> qui contiendra la composante rouge
+de <code>Lenna_color.ppm</code></li>
+<li><code>Lenna_color_green.pgm</code> qui contiendra la composante
+verte de <code>Lenna_color.ppm</code></li>
+<li><code>Lenna_color_blue.pgm</code> qui contiendra la composante bleue
+de <code>Lenna_color.ppm</code></li>
+<li><code>Lenna_[gray|color]_brighten.p[g|p]m</code> qui contiendra
+l’image d’entrée éclaircie d’un facteur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.5</mn><annotation encoding="application/x-tex">1.5</annotation></semantics></math>.</li>
+<li><code>Lenna_[gray|color]_melted.p[g|p]m</code> qui contiendra
+l’image dont on aura fait “fondre”
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mi>i</mi><mi>d</mi><mi>t</mi><mi>h</mi><mo>×</mo><mi>h</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>×</mo><mi>c</mi><mi>h</mi><mi>a</mi><mi>n</mi><mi>n</mi><mi>e</mi><mi>l</mi><mi>s</mi><mo>×</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">width \times height \times channels \times 5</annotation></semantics></math>
+pixels.</li>
+<li><code>Lenna_[gray|color]_inverse.p[g|p]m</code> qui contiendra
+l’inversion de l’image source.</li>
+<li><code>Lenna_gray_dynamic.pgm</code> qui contiendra la version avec
+une dynamique (différence entre les niveaux les plus sombre et les plus
+clair) maximisée (aussi appelée dynamique optimale) de
+<code>Lenna_gray.pgm</code>.</li>
+<li><code>Lenna_color_dynamic.ppm</code> qui ne contiendra pas
+directement la dynamique optimale de <code>Lenna_color.ppm</code> car
+celle-ci présente déjà une dynamique quasiment optimale. Ce n’est pas le
+cas en revanche de chacune de ses composantes (rouge, vert, bleue) prise
+séparément. Appliquez une dynamique optimale sur chacune des
+composantes, puis re-composez une image couleur à partir de ces
+composantes optimisée que vous sauverez dans le fichier
+<code>Lenna_color_dynamic.ppm</code>.</li>
+<li><code>Lenna_[gray|color]_levels.p[g|p]m</code> qui contiendra une
+version de l’image source limitée à 8 niveaux par composante.</li>
+<li><code>Lenna_[gray|color]_smaller_nearest.p[g|p]m</code> qui
+contiendra l’image source rétrécie d’un facteur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.36</mn><annotation encoding="application/x-tex">1.36</annotation></semantics></math>
+en utilisant la politique du plus proche voisin.</li>
+<li><code>Lenna_[gray|color]_smaller_bilinear.p[g|p]m</code> qui
+contiendra l’image source rétrécie d’un facteur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.36</mn><annotation encoding="application/x-tex">1.36</annotation></semantics></math>
+en utilisant la politique du plus proche voisin.</li>
+<li><code>Lenna_[gray|color]_larger_nearest.p[g|p]m</code> qui
+contiendra l’image source agrandie d’un facteur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.36</mn><annotation encoding="application/x-tex">1.36</annotation></semantics></math>
+en utilisant la politique du plus proche voisin.</li>
+<li><code>Lenna_[gray|color]_larger_bilinear.p[g|p]m</code> qui
+contiendra l’image source agrandie d’un facteur
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.36</mn><annotation encoding="application/x-tex">1.36</annotation></semantics></math>
+en utilisant la politique d’interpolation bi-linéaire.</li>
+<li><code>Lenna_[gray|color]_difference.p[g|p]m</code> qui contiendra la
+différence normalisée entre les deux type d’interpolations utilisées.
+Par exemple entre <code>Lenna_[gray|color]_larger_nearest.p[g|p]m</code>
+et <code>Lenna_[gray|color]_larger_bilinear.p[g|p]m</code>. Pour
+normaliser cette différence, il suffira de maximiser sa dynamique.</li>
+<li>Pour les opérations suivantes vous aurez besoin de charger une
+nouvelle image (qui contient si possible une majorité de noir et de
+blanc comme dans l’image <code>Lenna_BW.pgm</code>) qui servira de
+masque. Si cette image n’est pas de la bonne taille, vous pourrez la
+redimensionner à la taille de vos images d’entrées.
+<ul>
+<li><code>Lenna_[gray|color]_product.p[g|p]m</code> qui contiendra le
+produit de l’image en entrée avec le masque.</li>
+<li><code>Lenna_[gray|color]_mixture.p[g|p]m</code> qui contiendra la
+mixture de l’image inversée calculée précédemment et de l’image en
+entrée en utilisant le masque.</li>
+</ul></li>
+</ul>
+<h3 id="conseils">Conseils</h3>
+<ul>
+<li>Dans toutes les opérations sur les composantes des pixels, il faudra
+veiller aux erreurs de dépassement avec un type byte utilisant 1 octet
+et dont les valeurs doivent donc être dans l’intervalle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0 \cdots 255]</annotation></semantics></math>.
+Par exemple, dans l’expression <code>byte b = 192 + 137;</code>
+<code>b</code> vaudra
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>192</mn><mo>+</mo><mn>137</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>%</mi><mn>256</mn><mo>=</mo><mn>73</mn></mrow><annotation encoding="application/x-tex">(192 + 137)\%256 = 73</annotation></semantics></math>
+et non pas <code>329</code> comme avec le type <code>int</code>.</li>
+<li>Vous veillerez dans votre programme à libérer les ressources qui ne
+sont plus utilisées.</li>
+<li>Utilisez les fonctions du module <code>filename.[h|c]</code> pour
+décomposer les noms de fichiers à lire et composer les noms des fichiers
+à écrire.</li>
+</ul>
+<h2 id="questions-bonus">Questions Bonus</h2>
+<p>Si vous avez terminé les questions précédentes ainsi que le programme
+principal.</p>
+<h3 id="utilisation-dune-lut-pour-léclaircissement">Utilisation d’une
+LUT pour l’éclaircissement</h3>
+<p>Vous remarquerez que vous auriez pu utiliser une LUT pour “éclaircir”
+l’image comme mentionné dans la <a
+href="#manipulation-directe-des-valeurs-des-pixels">Manipulation directe
+des valeurs des pixels</a>.</p>
+<p>Concevez une LUT appliquant le même effet que l’éclaircissement
+d’image et appliquez la dans une fonction
+<code>picture brighten_picture_lut(picture p, double factor);</code>.</p>
+<h3 id="filtrage-dimages">Filtrage d’images</h3>
+<p>Le filtrage pour une image consiste à convoluer une image avec un “<a
+href="https://fr.wikipedia.org/wiki/Noyau_(traitement_d%27image)">noyau</a>”
+contenant des coefficients. La valeur d’un pixel de l’image résultat
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>,</mo><mi>l</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">y(k,l)</annotation></semantics></math>
+est le résultat de la somme des pixels
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>−</mo><mi>k</mi><mi>′</mi><mo>,</mo><mi>l</mi><mo>−</mo><mi>l</mi><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">x(k-k&#39;,l-l&#39;)</annotation></semantics></math>
+de l’image source dans un voisinage de taille
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n \times n</annotation></semantics></math>
+multipliés par les coefficients du noyau
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mi>′</mi><mo>,</mo><mi>l</mi><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(k&#39;, l&#39;)</annotation></semantics></math>
+:</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>,</mo><mi>l</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>k</mi><mi>′</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>k</mi><mi>′</mi><mo>=</mo><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mrow><msubsup><mo>∑</mo><mrow><mi>l</mi><mi>′</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>l</mi><mi>′</mi><mo>=</mo><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mrow><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>−</mo><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>+</mo><mi>k</mi><mi>′</mi><mo>,</mo><mi>l</mi><mo>−</mo><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>+</mo><mi>l</mi><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mi>′</mi><mo>,</mo><mi>l</mi><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mrow></mrow><annotation encoding="application/x-tex">y(k,l) = \sum_{k&#39; = 0}^{k&#39; = n-1}{\sum_{l&#39; = 0}^{l&#39; = n-1}{x(k - \frac{n}{2} + k&#39;, l - \frac{n}{2} + l&#39;) \cdot f(k&#39;, l&#39;)}}</annotation></semantics></math>
+avec
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>′</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mi>N</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">k&#39; \in [0 \cdots N - 1]</annotation></semantics></math>
+&amp;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>′</mi><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mi>M</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">l&#39; \in [0 \cdots M - 1]</annotation></semantics></math>
+où
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
+et
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
+sont respectivement les nombres de lignes et de colonnes de l’image
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>.</li>
+<li>où
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>,</mo><mi>l</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">x(k,l)</annotation></semantics></math>
+représente le pixel à la ligne
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>
+et la colonne
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+<ul>
+<li>Lorsque
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>−</mo><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>+</mo><mi>k</mi><mi>′</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">k - \frac{n}{2} + k&#39; &lt; 0</annotation></semantics></math>
+on pourra remplacer par 0</li>
+<li>Lorsque
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>−</mo><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>+</mo><mi>k</mi><mi>′</mi><mo>&gt;</mo><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">k - \frac{n}{2} + k&#39; &gt; N - 1</annotation></semantics></math>
+on pourra remplacer par
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N-1</annotation></semantics></math></li>
+<li>Il en ira de même pour
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">l&#39;</annotation></semantics></math>
+avec comme limite supérieure
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M - 1</annotation></semantics></math>.</li>
+</ul></li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mi>′</mi><mo>,</mo><mi>l</mi><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(k&#39;,l&#39;)</annotation></semantics></math>
+représente la réponse impulsionnelle du filtre contenant
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+lignes et
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+colonnes.
+<ul>
+<li>En général
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≪</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">n \ll M</annotation></semantics></math>
+et
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≪</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">n \ll N</annotation></semantics></math>.</li>
+</ul></li>
+</ul>
+<p>On dénotera un noyau de filtrage
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+comme ceci :
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center"><msub><mi>k</mi><mn>11</mn></msub></mtd><mtd columnalign="center"><mi>⋯</mi></mtd><mtd columnalign="center"><msub><mi>k</mi><mrow><mn>1</mn><mi>n</mi></mrow></msub></mtd></mtr><mtr><mtd columnalign="center"><mi>⋮</mi></mtd><mtd columnalign="center"><mo>⋱</mo></mtd><mtd columnalign="center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center"><msub><mi>k</mi><mrow><mi>n</mi><mn>1</mn></mrow></msub></mtd><mtd columnalign="center"><mi>⋯</mi></mtd><mtd columnalign="center"><msub><mi>k</mi><mrow><mi>n</mi><mi>n</mi></mrow></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>o</mi><mi>f</mi><mi>f</mi><mi>s</mi><mi>e</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">
+factor
+\left(
+\begin{matrix}
+    k_{11} &amp; \cdots &amp; k_{1n} \\
+    \vdots &amp; \ddots &amp; \vdots \\
+    k_{n1} &amp; \cdots &amp; k_{nn}
+\end{matrix}
+\right) + offset
+</annotation></semantics></math></p>
+<ul>
+<li>Les
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">k_{ij}</annotation></semantics></math>
+représentent les coefficients du noyau.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">factor</annotation></semantics></math>
+indique le facteur multiplicatif à appliquer aux coefficients
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">k_{ij}</annotation></semantics></math>
+pour normaliser leur somme afin de ne pas dépasser la valeur
+<code>MAX_BYTE</code> dans un pixel résultat.</li>
+<li>Et
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>o</mi><mi>f</mi><mi>f</mi><mi>s</mi><mi>e</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">offset</annotation></semantics></math>
+indique l’offset à ajouter à la valeur d’un pixel résultat pour que
+celui ci reste dans l’intervalle
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mn>255</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0 \cdots 255]</annotation></semantics></math></li>
+</ul>
+<p>Exemples de noyaux avec
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">n = 3</annotation></semantics></math>:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>9</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mn>0</mn><mo>,</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center"><mo>−</mo><mn>1</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center"><mo>−</mo><mn>2</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mn>255</mn><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center"><mo>−</mo><mn>1</mn></mtd><mtd columnalign="center"><mo>−</mo><mn>2</mn></mtd><mtd columnalign="center"><mo>−</mo><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>2</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mn>255</mn><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">
+\frac{1}{9}
+\left(
+\begin{matrix}
+    1 &amp; 1 &amp; 1 \\
+    1 &amp; 1 &amp; 1 \\
+    1 &amp; 1 &amp; 1
+\end{matrix}
+\right) + 0,
+\frac{1}{4}
+\left(
+\begin{matrix}
+    -1 &amp; 0 &amp; 1 \\
+    -2 &amp; 0 &amp; 2 \\
+    1 &amp; 0 &amp; 1
+\end{matrix}
+\right) + \frac{255}{2},
+\frac{1}{4}
+\left(
+\begin{matrix}
+    -1 &amp; -2 &amp; -1 \\
+    0 &amp; 0 &amp; 0 \\
+    1 &amp; 2 &amp; 1
+\end{matrix}
+\right) + \frac{255}{2}
+</annotation></semantics></math></p>
+<p>Exemple de noyau avec
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">n=5</annotation></semantics></math>
+représentant une gaussienne d’écart type
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="center"><mi>G</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="center"><mo>=</mo></mtd><mtd columnalign="center"><mi>A</mi><msup><mi>e</mi><mrow><mo>−</mo><mfrac><mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo>−</mo><msub><mi>u</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>v</mi><mo>−</mo><msub><mi>v</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mrow><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac></mrow></msup></mtd></mtr><mtr><mtd columnalign="center"><mi>n</mi></mtd><mtd columnalign="center"><mo>=</mo></mtd><mtd columnalign="center"><mn>5</mn></mtd></mtr><mtr><mtd columnalign="center"><mi>A</mi></mtd><mtd columnalign="center"><mo>=</mo></mtd><mtd columnalign="center"><mn>0.063</mn></mtd></mtr><mtr><mtd columnalign="center"><mi>σ</mi></mtd><mtd columnalign="center"><mo>=</mo></mtd><mtd columnalign="center"><mn>2.0</mn></mtd></mtr><mtr><mtd columnalign="center"><mi>u</mi><mo>,</mo><mi>v</mi></mtd><mtd columnalign="center"><mo>∈</mo></mtd><mtd columnalign="center"><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mi>⋯</mi><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="center"><msub><mi>u</mi><mn>0</mn></msub><mo>,</mo><msub><mi>v</mi><mn>0</mn></msub></mtd><mtd columnalign="center"><mo>=</mo></mtd><mtd columnalign="center"><mo stretchy="false" form="prefix">⌊</mo><mfrac><mi>n</mi><mn>2</mn></mfrac><mo stretchy="false" form="postfix">⌋</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">
+\begin{matrix}
+G(u,v) &amp; = &amp; A e^{-\frac{(u - u_0)^2(v - v_0)^2}{2 \sigma^2}} \\
+n &amp; = &amp; 5 \\
+A &amp; = &amp; 0.063 \\
+\sigma &amp; = &amp; 2.0 \\
+u, v &amp; \in &amp; [0 \cdots n-1] \\
+u_0, v_0 &amp; = &amp; \lfloor \frac{n}{2} \rfloor
+\end{matrix}
+</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.063</mn><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center"><mn>0.368</mn></mtd><mtd columnalign="center"><mn>0.535</mn></mtd><mtd columnalign="center"><mn>0.607</mn></mtd><mtd columnalign="center"><mn>0.535</mn></mtd><mtd columnalign="center"><mn>0.368</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>0.535</mn></mtd><mtd columnalign="center"><mn>0.779</mn></mtd><mtd columnalign="center"><mn>0.882</mn></mtd><mtd columnalign="center"><mn>0.779</mn></mtd><mtd columnalign="center"><mn>0.535</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>0.607</mn></mtd><mtd columnalign="center"><mn>0.882</mn></mtd><mtd columnalign="center"><mn>1.000</mn></mtd><mtd columnalign="center"><mn>0.882</mn></mtd><mtd columnalign="center"><mn>0.607</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>0.535</mn></mtd><mtd columnalign="center"><mn>0.779</mn></mtd><mtd columnalign="center"><mn>0.882</mn></mtd><mtd columnalign="center"><mn>0.779</mn></mtd><mtd columnalign="center"><mn>0.535</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>0.368</mn></mtd><mtd columnalign="center"><mn>0.535</mn></mtd><mtd columnalign="center"><mn>0.607</mn></mtd><mtd columnalign="center"><mn>0.535</mn></mtd><mtd columnalign="center"><mn>0.368</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">
+0.063
+\left(
+\begin{matrix}
+ 0.368 &amp; 0.535 &amp; 0.607 &amp; 0.535 &amp; 0.368 \\
+ 0.535 &amp; 0.779 &amp; 0.882 &amp; 0.779 &amp; 0.535 \\
+ 0.607 &amp; 0.882 &amp; 1.000 &amp; 0.882 &amp; 0.607 \\
+ 0.535 &amp; 0.779 &amp; 0.882 &amp; 0.779 &amp; 0.535 \\
+ 0.368 &amp; 0.535 &amp; 0.607 &amp; 0.535 &amp; 0.368 \\
+\end{matrix}
+\right) + 0
+</annotation></semantics></math></p>
+<figure>
+<img src="ressources/Gaussian552.svg" alt="gaussienne 5x5, sigma = 2" />
+<figcaption aria-hidden="true">gaussienne 5x5, sigma = 2</figcaption>
+</figure>
+<h4 id="exemples-dimages-filtrées">Exemples d’images filtrées</h4>
+<ul>
+<li><img src="ressources/Lenna_gray.png" alt="Lenna" /> filtrée avec le
+noyau gaussien ci-dessus
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_gray_blurred.png" alt="Lenna filtered" /> ce
+qui permet de flouter l’image.</li>
+<li><img src="ressources/Lenna_gray.png" alt="Lenna" /> filtrée avec le
+noyau
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>4</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center"><mo>−</mo><mn>1</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center"><mo>−</mo><mn>2</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center"><mn>1</mn></mtd><mtd columnalign="center"><mn>0</mn></mtd><mtd columnalign="center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mn>255</mn><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">
+\frac{1}{4}
+\left(
+\begin{matrix}
+  -1 &amp; 0 &amp; 1 \\
+  -2 &amp; 0 &amp; 2 \\
+  1 &amp; 0 &amp; 1
+\end{matrix}
+\right) + \frac{255}{2}
+</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math>
+<img src="ressources/Lenna_gray_grad_x.png" alt="Lenna filtered" /> Ce
+qui permet d’estimer une (parmi d’autres) dérivée horizontale de
+l’image.</li>
+</ul>
+<h2 id="vscode">VSCode</h2>
+<p>Les extensions suivantes pour Visual Studio Code vous seront utiles
+:</p>
+<ul>
+<li>Extension <a
+href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools">C/C++</a>
+<ul>
+<li><a
+href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack">C/C++
+Extension Pack</a></li>
+</ul></li>
+<li>Extension pour gérer un projet basé sur un Makefile : <a
+href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools">Makefile
+tools</a></li>
+<li>Pour vous aider à visualiser les images PGM ou PPM, vous pourrez
+utiliser l’extension suivante : <a
+href="https://marketplace.visualstudio.com/items?itemName=ngtystr.ppm-pgm-viewer-for-vscode">PBM/PPM/PGM
+Viewer for Visual Studio Code</a>.</li>
+</ul>
+</body>

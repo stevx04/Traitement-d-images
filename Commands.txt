@@ -1,0 +1,26 @@
+./my_program convert_to_color Lenna_gray.pgm ./Images/Lenna_gray_convert_color.ppm
+./my_program convert_to_gray Lenna_color.ppm ./Images/Lenna_color_convert_gray.pgm
+./my_program split Lenna_color.ppm ./Images/Lenna_color_red.pgm ./Images/Lenna_color_green.pgm ./Images/Lenna_color_blue.pgm
+./my_program brighten Lenna_gray.pgm ./Images/Lenna_gray_brighten.pgm
+./my_program brighten Lenna_color.ppm ./Images/Lenna_color_brighten.ppm
+./my_program melt Lenna_gray.pgm ./Images/Lenna_gray_melted.pgm
+./my_program melt Lenna_color.ppm ./Images/Lenna_color_melted.ppm
+./my_program inverse Lenna_gray.pgm ./Images/Lenna_gray_inverse.pgm  
+./my_program inverse Lenna_color.ppm ./Images/Lenna_color_inverse.ppm
+./my_program normalize_dynamic Lenna_gray.pgm ./Images/Lenna_gray_dynamic.pgm
+./my_program split Lenna_color.ppm ./Images/Lenna_color_red.pgm ./Images/Lenna_color_green.pgm ./Images/Lenna_color_blue.pgm
+./my_program normalize_dynamic ./Images/Lenna_color_red.pgm ./Images/Lenna_color_red_dynamic.pgm
+./my_program normalize_dynamic ./Images/Lenna_color_green.pgm ./Images/Lenna_color_green_dynamic.pgm
+./my_program normalize_dynamic ./Images/Lenna_color_blue.pgm ./Images/Lenna_color_blue_dynamic.pgm
+./my_program merge ./Images/Lenna_color_red_dynamic.pgm ./Images/Lenna_color_green_dynamic.pgm ./Images/Lenna_color_blue_dynamic.pgm ./Images/Lenna_color_dynamic.ppm
+./my_program levels Lenna_gray.pgm ./Images/Lenna_gray_levels.pgm
+./my_program levels Lenna_color.ppm ./Images/Lenna_color_levels.ppm
+./my_program resample_nearest Lenna_gray.pgm ./Images/Lenna_gray_smaller_nearest.pgm
+./my_program resample_nearest Lenna_color.ppm ./Images/Lenna_color_smaller_nearest.ppm
+./my_program resample_larger Lenna_gray.pgm ./Images/Lenna_gray_larger_nearest.pgm
+./my_program resample_larger Lenna_color.ppm ./Images/Lenna_color_larger_nearest.ppm
+./my_program multiply panda.pgm Lenna_gray.pgm ./Images/Lenna_gray_product.pgm
+./my_program multiply panda.ppm Lenna_color.ppm ./Images/Lenna_color_product.ppm
+./my_program mix ./Images/Lenna_color_inverse.ppm Lenna_color.ppm panda.ppm ./Images/Lenna_color_mixture.ppm
+./my_program mix ./Images/Lenna_gray_inverse.pgm Lenna_gray.pgm panda.pgm ./Images/Lenna_gray_mixture.pgm
+
